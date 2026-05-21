@@ -1,0 +1,72 @@
+{% extends "clients/base.html" %}
+
+{% block title %}Liste des clients{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="page-header-text">
+        <h2>Liste des clients</h2>
+        <p class="subtitle">Consultez, recherchez et gérez vos clients enregistrés</p>
+    </div>
+    <a href="{% url 'ajouter_client' %}" class="btn btn-primary">
+        <span class="btn-icon">+</span> Nouveau client
+    </a>
+</section>
+
+<div class="card card-padded search-card">
+    <form method="get" class="search-form" action="{% url 'liste_clients' %}">
+        <div class="search-input-wrap">
+            <input type="text" name="q" value="{{ recherche }}" placeholder="Rechercher par nom..." class="form-control">
+        </div>
+        <button type="submit" class="btn btn-secondary">Rechercher</button>
+        {% if recherche %}
+        <a href="{% url 'liste_clients' %}" class="btn btn-ghost">Effacer</a>
+        {% endif %}
+    </form>
+</div>
+
+{% if clients %}
+<div class="table-wrapper">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Client</th>
+                <th>Email</th>
+                <th>Téléphone</th>
+                <th>Adresse</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for client in clients %}
+            <tr>
+                <td>
+                    <div class="cell-nom">
+                        <span class="avatar">{{ client.nom|first|upper }}</span>
+                        {{ client.nom }}
+                    </div>
+                </td>
+                <td class="cell-email">{{ client.email }}</td>
+                <td>{{ client.telephone }}</td>
+                <td class="cell-adresse">{{ client.adresse }}</td>
+                <td class="actions">
+                    <a href="{% url 'modifier_client' client.pk %}" class="btn btn-small btn-outline">Modifier</a>
+                    <a href="{% url 'supprimer_client' client.pk %}" class="btn btn-small btn-danger">Supprimer</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="table-footer">
+    <p class="count"><strong>{{ clients|length }}</strong> client{{ clients|length|pluralize }} affiché{{ clients|length|pluralize }}</p>
+</div>
+{% else %}
+<div class="empty-state">
+    <div class="empty-icon">👤</div>
+    <h3>Aucun client{% if recherche %} trouvé{% endif %}</h3>
+    <p>{% if recherche %}Aucun résultat pour « {{ recherche }} ». Essayez un autre nom.{% else %}Commencez par ajouter votre premier client à la base.{% endif %}</p>
+    <a href="{% url 'ajouter_client' %}" class="btn btn-primary">Ajouter un client</a>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "clients/base.html" %}
+
+{% block title %}Supprimer {{ client.nom }}{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="page-header-text">
+        <h2>Suppression</h2>
+        <p class="subtitle">Cette action est irréversible</p>
+    </div>
+    <a href="{% url 'liste_clients' %}" class="btn btn-ghost">← Retour</a>
+</section>
+
+<div class="confirm-box">
+    <div class="confirm-icon">⚠</div>
+    <h3>Confirmer la suppression</h3>
+    <p>Êtes-vous sûr de vouloir supprimer le client <strong>{{ client.nom }}</strong> ? Toutes ses informations seront perdues.</p>
+    <ul class="client-details">
+        <li><strong>Email</strong> {{ client.email }}</li>
+        <li><strong>Tél.</strong> {{ client.telephone }}</li>
+        <li><strong>Adresse</strong> {{ client.adresse }}</li>
+    </ul>
+
+    <form method="post" class="form-actions">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Oui, supprimer</button>
+        <a href="{% url 'liste_clients' %}" class="btn btn-outline">Annuler</a>
+    </form>
+</div>
+{% endblock %}
